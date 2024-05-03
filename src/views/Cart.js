@@ -1,21 +1,9 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-  Typography,
-  Box,
-  Grid
-} from "@mui/material";
+import { Button, Typography, Box, Grid, Card } from "@mui/material";
 import { remove, increaseQuantity, decreaseQuantity } from "../redux/cartSlice";
 import Navbar from "../components/Navbar";
-
+import { Link } from "react-router-dom";
 function Cart() {
   const cartItems = useSelector((state) => state.cart);
   const [total, setTotal] = useState(calculateTotal());
@@ -46,61 +34,186 @@ function Cart() {
       <Grid>
         <Navbar></Navbar>
       </Grid>
-      <TableContainer component={Paper}>
-        <Table aria-label="cart table">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontSize: "20px" }}>Title</TableCell>
-              <TableCell sx={{ fontSize: "20px" }}>Price</TableCell>
-              <TableCell sx={{ fontSize: "20px" }}>Quantity</TableCell>
-              <TableCell sx={{ fontSize: "20px" }}>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {cartItems.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>{item.title}</TableCell>
-                <TableCell>${item.price}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    onClick={() => handleIncreaseQuantity(item.id)}
+      <Box
+        sx={{ backgroundColor: "#313131", justifyContent: "center" }}
+        width="100vw"
+        height="100vh"
+      >
+        <Box
+          display="flex"
+          flexWrap="wrap"
+          position={"absolute"}
+          top={"300px"}
+          left={"700px"}
+          sx={{
+            backgroundColor: "#313131",
+            color: "white",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{ paddingLeft: "20px", paddingTop: "10px", fontWeight: 800 }}
+          >
+            Your Shopping Cart
+          </Typography>
+          {cartItems.map((item) => (
+            <Box
+              px={2.3}
+              key={item.id}
+              sx={{
+                alignItems: "center",
+                textAlign: "center",
+                overflow: "hidden",
+              }}
+            >
+              <Card
+                style={{
+                  width: "400px",
+                  marginBottom: "16px",
+                  backgroundColor: "#575757",
+                  color: "white",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    margin: "10px",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    noWrap
+                    sx={{ fontWeight: 900, fontSize: "20px" }}
                   >
-                    +
-                  </Button>
-
-                  {item.quantity}
-
-                  <Button
-                    variant="contained"
-                    onClick={() => handleDecreaseQuantity(item.id)}
+                    {item.title.split(" ").slice(0, 7).join(" ")}
+                  </Typography>
+                  <Box sx={{ display: "flex", flexDirection: "row" }}>
+                    <Typography
+                      variant="body1"
+                      color="white"
+                      sx={{
+                        alignItems: "center",
+                        fontWeight: 900,
+                        fontSize: "20px",
+                      }}
+                    >
+                      ${item.quantity * item.price}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "13px",
+                        fontStyle: "italic",
+                        margin: "6px",
+                      }}
+                    >
+                      (${item.price}/item)
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    margin: "10px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box sx={{ left: "0px" }}>
+                    <Typography variant="body1" color="white">
+                      x {item.quantity}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      textAlign: "end",
+                      margin: "10px",
+                      display: "flex",
+                      gap: "5px",
+                    }}
                   >
-                    -
-                  </Button>
-                </TableCell>
-                <TableCell>
+                    <Box
+                      height={"30px"}
+                      width={"30px"}
+                      variant="outlined"
+                      onClick={() => handleIncreaseQuantity(item.id)}
+                      sx={{
+                        border: "1px solid white",
+                        color: "white",
+                        textAlign: "center",
+                        fontSize: "20px",
+                        alignItems: "center",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      +
+                    </Box>
+                    <Box
+                      height={"30px"}
+                      width={"30px"}
+                      variant="outlined"
+                      onClick={() => handleDecreaseQuantity(item.id)}
+                      sx={{
+                        border: "1px solid white",
+                        color: "white",
+                        textAlign: "center",
+                        fontSize: "22px",
+                        alignItems: "center",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      -
+                    </Box>
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    alignItems: "end",
+                    textAlign: "end",
+                    padding: "10px",
+                  }}
+                >
                   <Button
-                    variant="contained"
-                    color="secondary"
+                    variant="outlined"
+                    sx={{
+                      border: "1px solid white",
+                      color: "white",
+                      fontSize: "12px",
+                      borderRadius: "5px",
+                    }}
                     onClick={() => handleRemove(item.id)}
                   >
                     Remove
                   </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: 20,
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h5">Total : ${calculateTotal()}</Typography>
+                </Box>
+              </Card>
+            </Box>
+          ))}
+          <Typography
+            variant="h5"
+            sx={{ alignItems: "center", textAlign: "center", bottom: "10px" }}
+          >
+            Total : ${calculateTotal()}
+          </Typography>
+          <Box height={"20px"} width={"20px"}>
+            <Link to="/home">
+              <Button
+                variant="outlined"
+                sx={{
+                  border: "1px solid white",
+                  color: "white",
+                  fontSize: "12px",
+                  borderRadius: "5px",
+                  left: "175px",
+                }}
+              >
+                Back
+              </Button>
+            </Link>
+          </Box>
+        </Box>
       </Box>
     </>
   );

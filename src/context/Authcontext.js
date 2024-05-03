@@ -6,12 +6,12 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const authenticateUser = (email, password) => {
-
     const user = userData.userData?.find(
       (user) => user.email === email && user.password === password
     );
     if (user) {
       setCurrentUser(user);
+      localStorage.setItem("authToken", `Id ${user.user_id}`);
       return true;
     } else {
       return false;
@@ -28,6 +28,7 @@ const AuthProvider = ({ children }) => {
         currentUser,
         authenticateUser,
         generateAuthToken,
+        setCurrentUser,
       }}
     >
       {children}

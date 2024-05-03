@@ -1,22 +1,23 @@
-import { AuthProvider } from "./context/Authcontext";
+import {  useAuth } from "./context/Authcontext";
 import Home from "./views/Home";
 import LoginForm from "./views/Login";
-import { Provider } from "react-redux"; 
+import { Provider } from "react-redux";
 import store from "./redux/store";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import Cart from "./views/Cart";
+import PageNotFound from "./components/PageNotFound";
 function App() {
+  const { currentUser} = useAuth();
   return (
     <>
       <Provider store={store}>
         <BrowserRouter>
-          <AuthProvider>
             <Routes>
-              <Route path="/home" element={<Home> </Home>}></Route>
-              <Route path="/" element={<LoginForm></LoginForm>}></Route>
-              <Route path="/cart" element={<Cart></Cart>}></Route>
+              <Route path="/home" element={currentUser ? <Home/> : <LoginForm />}></Route>
+              <Route path="/" element={<LoginForm />}></Route>
+              <Route path="/cart" element={currentUser ? <Cart/> : <LoginForm />}></Route>
+              <Route path="*" element={<PageNotFound/>} />
             </Routes>
-          </AuthProvider>
         </BrowserRouter>
       </Provider>
     </>

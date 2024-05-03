@@ -1,15 +1,23 @@
-import React from "react";
-
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { add } from "../redux/cartSlice";
-import { Box, Button, Typography, Grid } from "@mui/material";
+import { Box, Button, Typography, Grid, Card } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css";
-
 import SAMPLE_PRODUCTS from "../data/products";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
-function Home() {
+function Home({ generateAuthToken }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    console.log(authToken)
+    if (!authToken) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   return (
     <>
@@ -18,45 +26,84 @@ function Home() {
       </Grid>
       <Box
         display="flex"
-        flexWrap="wrap"
         justifyContent="center"
+        alignItems="center"
+        flexWrap="wrap"
         gap={2}
-        sx={{ paddingTop: "400px" }}
+        width="100vw"
+        height="100vh"
+        sx={{
+          backgroundColor: "#3F3F3F",
+          color: "white",
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
+        <Typography variant="h6">BUY YOUR FAVOURITE PRODUCTS</Typography>
         {SAMPLE_PRODUCTS.map((product) => (
           <Box
             key={product.id}
-            width={300}
-            marginBottom={2}
-            sx={{ alignItems: "center", textAlign: "center" }}
+            sx={{
+              alignItems: "center",
+              textAlign: "center",
+              width: "500px",
+            }}
           >
-            <Box
-              boxShadow={3}
-              borderRadius={3}
-              overflow="hidden"
-              width="100%"
-              maxWidth={300}
+            <Card
+              style={{
+                width: "100%",
+                marginBottom: "16px",
+                height: "125px",
+              }}
             >
-              <Box width={300}>
-                <Typography variant="h6" noWrap>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  margin: "10px",
+                }}
+              >
+                <Typography variant="h6" noWrap sx={{ fontWeight: 900 }}>
                   {product.title.split(" ").slice(0, 7).join(" ")}
                 </Typography>
-                <Typography variant="body1" color="textSecondary">
-                  ${product.description}
+                <Box
+                  px={3}
+                  py={0.5}
+                  sx={{
+                    backgroundColor: "black",
+                    borderRadius: "25px",
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    color="white"
+                    sx={{ alignItems: "center" }}
+                  >
+                    {" "}
+                    ${product.price}
+                    {".00"}
+                  </Typography>{" "}
+                </Box>
+              </Box>
+              <Box sx={{ margin: "10px" }}>
+                <Typography
+                  variant="body1"
+                  color="textSecondary"
+                  sx={{ textAlign: "start" }}
+                >
+                  {product.description}
                 </Typography>
-                <Typography variant="body1" color="textSecondary">
-                  ${product.price}
-                </Typography>
+              </Box>
+              <Box sx={{ textAlign: "end", margin: "10px" }}>
                 <Button
-                  variant="contained"
+                  variant="outlined"
                   color="primary"
                   onClick={() => dispatch(add(product))}
-                  fullWidth
                 >
                   Add to cart
                 </Button>
               </Box>
-            </Box>
+            </Card>
           </Box>
         ))}
       </Box>

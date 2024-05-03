@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/Authcontext";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Grid, Box } from "@mui/material";
-
+import { TextField, Button, Typography, Box } from "@mui/material";
 const LoginForm = () => {
   const { authenticateUser, generateAuthToken } = useAuth();
   const {
@@ -21,7 +20,7 @@ const LoginForm = () => {
     if (isAuthenticated) {
       const authToken = generateAuthToken();
       console.log("Authentication successful.", authToken);
-      navigate("/home");
+      navigate(`/home?token=${authToken}`); 
     } else {
       console.log("Invalid email or password.");
     }
@@ -29,19 +28,50 @@ const LoginForm = () => {
 
   return (
     <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+      style={{
         width: "100%",
-        maxWidth: 400, 
-        margin: "auto", 
-        paddingTop: 50, 
+        minHeight: "100vh",
+        backgroundColor: "#3F3F3F",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
-      <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
-        <Grid container spacing={2} justifyContent="center">
-          <Grid item xs={12}>
+      <Box
+        style={{
+          width: "900px",
+          height: "500px",
+          display: "flex",
+          borderRadius: "10px",
+        }}
+      >
+        <Box
+          style={{
+            flex: 2,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "white",
+            borderTopLeftRadius: "10px",
+            borderBottomLeftRadius: "10px",
+            padding: "24px",
+          }}
+        >
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="h3"
+              style={{ fontSize: "35px", marginTop: "0" }}
+            >
+              Login to Your Account
+            </Typography>
             <TextField
               {...register("email", { required: "Email is required" })}
               label="Email"
@@ -52,8 +82,7 @@ const LoginForm = () => {
               error={!!errors.email}
               helperText={errors.email?.message}
             />
-          </Grid>
-          <Grid item xs={12}>
+            <br />
             <TextField
               {...register("password", { required: "Password is required" })}
               label="Password"
@@ -65,14 +94,47 @@ const LoginForm = () => {
               error={!!errors.password}
               helperText={errors.password?.message}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <Button
+              type="submit"
+              variant="contained"
+              style={{
+                border: "none",
+                outline: "none",
+                padding: "12px 0",
+                backgroundColor: "#3bb19b",
+                borderRadius: "20px",
+                width: "180px",
+                fontWeight: "bold",
+                fontSize: "14px",
+                cursor: "pointer",
+                margin: "10px",
+              }}
+            >
               Login
             </Button>
-          </Grid>
-        </Grid>
-      </form>
+          </form>
+        </Box>
+        <Box
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "#3bb19b",
+            borderTopRightRadius: "10px",
+            borderBottomRightRadius: "10px",
+            padding: "24px",
+          }}
+        >
+          <Typography
+            variant="h3"
+            style={{ fontSize: "40px", color: "white", marginTop: "0" }}
+          >
+            Login
+          </Typography>
+        </Box>
+      </Box>
     </Box>
   );
 };
