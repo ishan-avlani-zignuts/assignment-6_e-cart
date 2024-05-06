@@ -2,28 +2,34 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { add } from "../redux/cartSlice";
 import { Box, Button, Typography, Grid, Card } from "@mui/material";
-import "react-toastify/dist/ReactToastify.css";
 import SAMPLE_PRODUCTS from "../data/products";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Home({ generateAuthToken }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("useEffect triggered");
     const authToken = localStorage.getItem("authToken");
-    console.log(authToken)
+    console.log(authToken);
+    toast.success("Login successful.");
     if (!authToken) {
+      toast.error("You need to login first");
       navigate("/login");
     }
   }, [navigate]);
+
 
   return (
     <>
       <Grid>
         <Navbar></Navbar>
       </Grid>
+      <ToastContainer />
       <Box
         display="flex"
         justifyContent="center"

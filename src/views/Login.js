@@ -3,6 +3,10 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../context/Authcontext";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Typography, Box } from "@mui/material";
+
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const LoginForm = () => {
   const { authenticateUser, generateAuthToken } = useAuth();
   const {
@@ -18,11 +22,10 @@ const LoginForm = () => {
     const { email, password } = data;
     const isAuthenticated = authenticateUser(email, password);
     if (isAuthenticated) {
-      const authToken = generateAuthToken();
-      console.log("Authentication successful.", authToken);
-      navigate(`/home?token=${authToken}`); 
+      generateAuthToken();
+      navigate("/home");
     } else {
-      console.log("Invalid email or password.");
+      toast.error("Invalid email or password.");
     }
   };
 
@@ -37,6 +40,7 @@ const LoginForm = () => {
         justifyContent: "center",
       }}
     >
+      <ToastContainer />
       <Box
         style={{
           width: "900px",
